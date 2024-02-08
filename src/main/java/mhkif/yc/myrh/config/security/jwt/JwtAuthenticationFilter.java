@@ -1,6 +1,7 @@
 package mhkif.yc.myrh.config.security.jwt;
 
 import mhkif.yc.myrh.service.UserDetailsServiceImpls.AdminUserDetails;
+import mhkif.yc.myrh.service.UserDetailsServiceImpls.ApplicantUserDetails;
 import mhkif.yc.myrh.service.UserDetailsServiceImpls.CompanyUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,11 +28,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final AdminUserDetails adminUserDetails;
     private final CompanyUserDetails companyUserDetails;
-
+    private final ApplicantUserDetails applicantUserDetails;
 
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         String header = request.getHeader("Authorization");
         final String token;
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userType = jwtService.extractUserTypeFromToken();
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (userType.equals("company")) {
-                UserDetails userDetails =  this.companyUserDetails.loadUserByUsername(userEmail);
+                UserDetails userDetails = this.companyUserDetails.loadUserByUsername(userEmail);
                 if (jwtService.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()
@@ -58,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             } else if (userType.equals("admin")) {
-                UserDetails userDetails =  this.adminUserDetails.loadUserByUsername(userEmail);
+                UserDetails userDetails = this.adminUserDetails.loadUserByUsername(userEmail);
                 if (jwtService.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()
@@ -67,9 +68,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                }            } else {
+                }
+            }
+            else if (userType.equals("applicant")) {
+                UserDetails userDetails = this.applicantUserDetails.loadUserByUsername(userEmail);
+                if (jwtService.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
+                    authenticationToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+            }
+            else {
                 throw new UsernameNotFoundException("Invalid user type: " + userType);
             }
+
 
         }
         filterChain.doFilter(request, response);
