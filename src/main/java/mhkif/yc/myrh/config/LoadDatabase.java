@@ -8,6 +8,7 @@ import mhkif.yc.myrh.enums.UserStatus;
 import mhkif.yc.myrh.model.*;
 import mhkif.yc.myrh.repository.JobApplicantRepo;
 import mhkif.yc.myrh.repository.JobSeekerRepo;
+import mhkif.yc.myrh.repository.ProfileRepo;
 import mhkif.yc.myrh.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class LoadDatabase {
+class LoadDatabase{
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
     private final JobApplicantRepo jobApplicantRepo;
@@ -30,16 +31,17 @@ class LoadDatabase {
     CommandLineRunner initDatabase(
             ICompanyService companyService,
             IAdminService adminService,
-            IActivityAreaService profileService,
+            IActivityAreaService activityAreaService,
             ICityService cityService,
             IOfferService offerService,
             JobSeekerRepo jobSeekerRepo,
+            ProfileRepo profileRepo,
             IJobSeekerService jobSeekerService,
             IJobApplicantService jobApplicantService) {
 
         return args -> {
 
-            saveJobSeeker(jobSeekerRepo);
+
 
             AdminReq admin = new AdminReq();
             admin.setFirst_name("Abdelmalek");
@@ -65,8 +67,8 @@ class LoadDatabase {
             CityReq city3 = new CityReq();
             city3.setName("Rabat");
 
-            ActivityAreaReq profile = new ActivityAreaReq();
-            profile.setDescription("Information Technology");
+            ActivityAreaReq activityAreaReq = new ActivityAreaReq();
+            activityAreaReq.setDescription("Information Technology");
 
             OfferReq offer = new OfferReq();
             offer.setTitle("Developpeur / Developpeuse Full stack");
@@ -78,11 +80,19 @@ class LoadDatabase {
             offer.setLevel(StudyLevel.BacPlus2);
             offer.setSalary(12000);
 
+            Profile  profile = new Profile();
+            profile.setName("Java");
+            profile.setActivityArea(ActivityArea.builder().id(1).build());
+
+
             JobSeekerReq jobSeeker = new JobSeekerReq();
-            jobSeeker.setFirst_name("El Mehdi");
-            jobSeeker.setLast_name("El Hajoujy");
-            jobSeeker.setEmail("elmehdi@myrh.com");
-            jobSeeker.setPassword("testtest");
+            jobSeeker.setFirst_name("salah");
+            jobSeeker.setLast_name("hydra");
+            jobSeeker.setEmail("salah@myrh.com");
+            jobSeeker.setPassword("111salah");
+            jobSeeker.setProfile(profile);
+            jobSeeker.setProfile_verify(false);
+
 
 /*
             JobApplicantId jobApplicantId = new JobApplicantId();
@@ -102,26 +112,18 @@ class LoadDatabase {
             log.info("Preloading City 2 : " + cityService.create(city2).toString());
             log.info("Preloading City 3 : " + cityService.create(city3).toString());
 
-            log.info("Preloading Profile 1 : " + profileService.create(profile).toString());
+            log.info("Preloading ActivityArea 1 : " + activityAreaService.create(activityAreaReq).toString());
+            log.info("Preloading Profile 1 : " + profileRepo.save(profile));
             log.info("Preloading Offer 1 : " + offerService.create(offer).toString());
             log.info("Preloading JobSeeker 1 : " + jobSeekerService.create(jobSeeker).toString());
+
+
             //log.info("Preloading Job Applicant 1 : " + jobApplicantService.create(jobApplicant).toString());
             saveFakeJobApplication();
 
         };
     }
 
-    private void saveJobSeeker(JobSeekerRepo jobSeekerRepo) {
-        JobSeeker jobSeeker = new JobSeeker();
-        jobSeeker.setFirst_name("El Mehdi");
-        jobSeeker.setLast_name("El Hajoujy");
-        jobSeeker.setEmail("elmahdi311@gmail.com");
-        jobSeeker.setPassword("testtest");
-        jobSeeker.setStatus(UserStatus.ONLINE);
-        jobSeeker = jobSeekerRepo.save(jobSeeker);
-        log.info("Preloading JobSeeker  : " + jobSeeker.getId() + " " + jobSeeker.getFirst_name() + " " + jobSeeker.getLast_name());
-
-    }
 
     private void saveFakeJobApplication(){
         JobApplicantId jobApplicantId = new JobApplicantId();
@@ -133,13 +135,9 @@ class LoadDatabase {
         jobApplicant.setStatus(JobApplicationStatus.ACCEPTED);
         jobApplicant.setIsViewed(true);
 
-
-
-        //jobApplicant.setJobSeeker(jobSeeker);
-        //jobApplicant.setIsViewed(true);
-        this.jobApplicantRepo.save(jobApplicant);
-        jobApplicant.getId().setJobSeeker_id(2);
-        this.jobApplicantRepo.save(jobApplicant);
+//        this.jobApplicantRepo.save(jobApplicant);
+//        jobApplicant.getId().setJobSeeker_id(2);
+//        this.jobApplicantRepo.save(jobApplicant);
 
 
     }
