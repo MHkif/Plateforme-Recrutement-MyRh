@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import mhkif.yc.myrh.model.Profile;
 
 @Data
 public class JobSeekerReq {
@@ -33,6 +34,12 @@ public class JobSeekerReq {
 
 
     private String image;
+    @NotNull(message = "profile field is required")
+    @NotBlank(message = "profile field is required")
+    private Profile profile;
+    @NotNull(message = "profile_verify field is required")
+    @NotBlank(message = "profile_verify field is required")
+    private Boolean profile_verify;
 
 
 }
