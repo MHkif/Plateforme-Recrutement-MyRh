@@ -21,7 +21,6 @@ public class JobSeeker extends Person{
     private RoleEnum role = RoleEnum.APPLICANT;
     @ManyToOne
     private  Profile profile;
-
     private Boolean profile_verify;
     // The entity that specifies the @JoinTable is the owning side of the relationship and
     // the entity that specifies the mappedBy attribute is the inverse side.
