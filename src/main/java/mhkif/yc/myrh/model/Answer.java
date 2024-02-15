@@ -9,7 +9,7 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Question question;
     private String answer;
     private boolean rightAnswer;

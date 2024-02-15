@@ -23,9 +23,7 @@ import java.util.Objects;
 @Service
 public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilterService {
 
-    //: IT'S SO MUCH BETTER TO NAME THE JOB SEEKER REPOSITORY ->JobSeekerRepository than repository
     private final JobSeekerRepo repository;
-
     private final JobSeekerMapper mapper;
 
     @Autowired
@@ -48,20 +46,24 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
 
     @Override
     public JobSeekerRes create(JobSeekerReq request) {
+        final JobSeeker jobSeeker;
+        // Create User
         if (!repository.existsByEmail(request.getEmail())) {
-            JobSeeker jobSeeker = repository.save(mapper.reqToEntity(request));
-            return mapper.toRes(jobSeeker);
+             jobSeeker = repository.save(mapper.reqToEntity(request));
+        }else {
+            // Re-Assign User
+            jobSeeker = repository.findByEmail(request.getEmail()).orElseThrow(() ->  new EntityNotFoundException("User Applicant not found 404"));
+            if (!jobSeeker.isEnabled()) {
+                jobSeeker.setPassword(request.getPassword());
+                jobSeeker.setImage(request.getImage());
+                repository.save(jobSeeker);
+
+            }else {
+                throw new InternalServerException("Email Already Taken");
+            }
         }
 
-        JobSeeker jobSeeker = repository.findByEmail(request.getEmail()).get();
-        if (!jobSeeker.isEnabled()) {
-            jobSeeker.setPassword(request.getPassword());
-            jobSeeker.setImage(request.getImage());
-            repository.save(jobSeeker);
-            return mapper.toRes(jobSeeker);
-        }else {
-            throw new InternalServerException("Email Already Taken");
-        }
+        return mapper.toRes(jobSeeker);
     }
 
     @Override
