@@ -22,6 +22,7 @@ import java.util.Map;
 @RequestMapping("myrh/api/v1/jobSeekers")
 @CrossOrigin("*")
 public class JobSeekerController {
+
     private final IJobSeekerService service;
     private final IJobSeekerFilterService jobSeekerFilterService;
 
@@ -31,7 +32,7 @@ public class JobSeekerController {
         this.jobSeekerFilterService = jobSeekerFilterService;
     }
 
-    @PostMapping("")
+    @PostMapping("/auth/register")
     public ResponseEntity<HttpRes> save(@Valid @RequestBody JobSeekerReq req) {
         JobSeekerRes response = service.create(req);
           return ResponseEntity.created(URI.create("")).body(
@@ -47,7 +48,7 @@ public class JobSeekerController {
         );
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/auth/login")
     public ResponseEntity<HttpRes> auth(@Valid @RequestBody AuthReq auth){
         JobSeekerRes response = service.auth(auth.getEmail(), auth.getPassword());
         return ResponseEntity.accepted().body(

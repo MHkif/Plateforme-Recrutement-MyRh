@@ -32,13 +32,10 @@ public class JobSeekerReq {
     private String password;
 
 
-
     private String image;
     @NotNull(message = "profile field is required")
-    @NotBlank(message = "profile field is required")
     private Profile profile;
     @NotNull(message = "profile_verify field is required")
-    @NotBlank(message = "profile_verify field is required")
     private Boolean profile_verify;
 
 

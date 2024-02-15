@@ -14,7 +14,7 @@ public class JobSeekerRes {
     private String password;
     private String image;
     private Boolean profile_verify;
-    private Profile profile;
+    private ProfileRes profile;
     private boolean isEnabled;
     //Set<Offer> offers = new HashSet<>();
 

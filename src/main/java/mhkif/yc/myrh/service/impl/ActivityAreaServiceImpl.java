@@ -8,6 +8,8 @@ import mhkif.yc.myrh.repository.ActivityAreaRepo;
 import mhkif.yc.myrh.service.IActivityAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,8 +30,9 @@ public class ActivityAreaServiceImpl implements IActivityAreaService {
     }
 
     @Override
-    public Page<ActivityAreaRes> getAll(int page, int size) {
-        return null;
+    public  Page<ActivityAreaRes> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findAll(pageable).map(mapper::toRes);
     }
 
     @Override
