@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .configurationSource(corsConfigurationSource())
                 );
 
-       // http.httpBasic(Customizer.withDefaults());
+
         http.addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
