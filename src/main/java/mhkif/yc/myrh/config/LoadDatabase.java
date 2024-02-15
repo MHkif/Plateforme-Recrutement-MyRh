@@ -41,6 +41,8 @@ class LoadDatabase {
 
         return args -> {
 
+        ActivityAreaReq activityAreaReq1=new ActivityAreaReq();
+        activityAreaReq1.setDescription("java");
 
             AdminReq admin = new AdminReq();
             admin.setFirst_name("Abdelmalek");
@@ -81,6 +83,7 @@ class LoadDatabase {
             Profile profile = new Profile();
             profile.setName("Java");
             profile.setActivityArea(ActivityArea.builder().id(1).build());
+//            activityAreaService.create()
 
 
             JobSeekerReq jobSeeker = new JobSeekerReq();
@@ -102,6 +105,7 @@ class LoadDatabase {
             log.info("Preloading Profile 1 : " + profileRepo.save(profile));
             log.info("Preloading Offer 1 : " + offerService.create(offer).toString());
             log.info("Preloading JobSeeker 1 : " + jobSeekerService.create(jobSeeker).toString());
+
             saveFakeJobApplication();
 
             createJavaQuiz(profileRepo, questionRepo, answerRepo);

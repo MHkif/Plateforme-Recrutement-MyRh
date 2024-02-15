@@ -21,7 +21,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("myrh/api/v1/companies")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class CompanyController {
 
