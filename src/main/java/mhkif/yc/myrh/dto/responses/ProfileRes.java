@@ -7,5 +7,5 @@ import mhkif.yc.myrh.model.ActivityArea;
 public class ProfileRes {
     private int id;
     private String name;
-    private ActivityArea activityArea;
+    private ActivityAreaRes activityArea;
 }
