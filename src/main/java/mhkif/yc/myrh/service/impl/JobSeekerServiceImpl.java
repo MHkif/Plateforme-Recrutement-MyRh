@@ -56,6 +56,8 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
             if (!jobSeeker.isEnabled()) {
                 jobSeeker.setPassword(request.getPassword());
                 jobSeeker.setImage(request.getImage());
+                jobSeeker.setProfile(request.getProfile());
+                jobSeeker.setProfile_verify(false);
                 repository.save(jobSeeker);
 
             }else {

@@ -27,7 +27,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("myrh/api/v1/jobSeekers")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class JobSeekerController {
 

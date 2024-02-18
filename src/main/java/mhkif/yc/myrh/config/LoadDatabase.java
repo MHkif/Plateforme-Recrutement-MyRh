@@ -87,10 +87,10 @@ class LoadDatabase {
 
 
             JobSeekerReq jobSeeker = new JobSeekerReq();
-            jobSeeker.setFirst_name("salah");
-            jobSeeker.setLast_name("hydra");
-            jobSeeker.setEmail("salah@myrh.com");
-            jobSeeker.setPassword("111salah");
+            jobSeeker.setFirst_name("Salaheddine");
+            jobSeeker.setLast_name("Belfirme");
+            jobSeeker.setEmail("salahBelfirme@myrh.com");
+            jobSeeker.setPassword("salahsalah");
             jobSeeker.setProfile(profile);
             jobSeeker.setProfile_verify(false);
 
